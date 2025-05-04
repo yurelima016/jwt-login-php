@@ -6,7 +6,7 @@
     <title>JWT Challenge</title>
 </head>
 <body>
-    <form action="auth/login.php" method="post">
+    <form action="login.php" method="post">
         <h1>JWT Login Challenge</h1>
         <div>
             <label for="user">Username: </label>
@@ -18,5 +18,16 @@
         </div>
         <button type="submit">Login</button>
     </form>
+
+    <div id="error-message" style="color:red; display:none;"></div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('error') === 'invalid') {
+            document.getElementById('error-message').innerText = 'Usuário ou senha inválidos.';
+            document.getElementById('error-message').style.display = 'block';
+        }
+    </script>
+      
 </body>
 </html>
