@@ -1,5 +1,5 @@
 <?php
-require '../auth/verify-token.php';
+require '../../src/auth/verify-token.php';
 ?>
 
 <h1>Olá, <?= htmlspecialchars($username) ?>!</h1>

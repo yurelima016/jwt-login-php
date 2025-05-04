@@ -1,5 +1,5 @@
 <?php
-    require 'database.php';
+    require '.././src/config/database.php';
 
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = $_POST['user'] ?? '';
@@ -10,6 +10,7 @@
         $user = $stmt -> fetch();
     
         if ($user && hash('sha256', $password) === $user['password']) {
+            session_regenerate_id(true);
             // JWT HEADER
             $header = [
                 'alg' => 'HS256',
@@ -19,7 +20,6 @@
             $header = rtrim(strtr(base64_encode($header), '+/', '-_'), '=');
 
             // JWT PAYLOAD
-            $token_duration = time() + (60 * 60);
             $payload = [
                 'username' => $user['username'],
                 'iat' => time(),
@@ -34,14 +34,14 @@
             $signature = rtrim(strtr(base64_encode($signature), '+/', '-_'), '=');
 
             $jwt = "$header.$payload.$signature";
-            // Login bem-sucedido
             session_start();
             $_SESSION['user'] = $user['username'];
             $_SESSION['jwt'] = $jwt;
-            header('Location: ../protected/dashboard.php');
+            header('Location: ./protected/dashboard.php');
             exit;
         } else {
-            echo "Usuário ou senha inválidos.";
+            header('Location: ../public/index.html?error=invalid');
+            exit;
         }
     }
 ?>
